@@ -802,10 +802,28 @@ body::before {
   border: 0;
   background: transparent;
   box-shadow: none;
+  opacity: 0;
+  transition: opacity 0.26s ease;
 }
 
 .image-lightbox::backdrop {
   background: rgba(0, 0, 0, 0.72);
+  opacity: 0;
+  transition: opacity 0.26s ease;
+}
+
+.image-lightbox.is-visible,
+.image-lightbox.is-closing {
+  display: grid;
+  place-items: center;
+}
+
+.image-lightbox.is-visible {
+  opacity: 1;
+}
+
+.image-lightbox.is-visible::backdrop {
+  opacity: 1;
 }
 
 .image-lightbox-image {
@@ -815,6 +833,14 @@ body::before {
   max-height: 92vh;
   margin: 4vh auto;
   object-fit: contain;
+  opacity: 0;
+  transform: scale(0.96) translateY(16px);
+  transition: opacity 0.26s ease, transform 0.32s ease;
+}
+
+.image-lightbox.is-visible .image-lightbox-image {
+  opacity: 1;
+  transform: scale(1) translateY(0);
 }
 
 .image-lightbox-close {
@@ -834,6 +860,14 @@ body::before {
   cursor: pointer;
   display: grid;
   place-items: center;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+
+.image-lightbox.is-visible .image-lightbox-close {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .image-lightbox-close:hover {

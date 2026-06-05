@@ -12,11 +12,21 @@ if (enlargeableImages.length > 0) {
 
   const lightboxImage = lightbox.querySelector(".image-lightbox-image");
   const closeButton = lightbox.querySelector(".image-lightbox-close");
+  let closeTimer;
 
   const closeLightbox = () => {
-    if (lightbox.open) {
-      lightbox.close();
+    if (!lightbox.open || lightbox.classList.contains("is-closing")) {
+      return;
     }
+
+    lightbox.classList.remove("is-visible");
+    lightbox.classList.add("is-closing");
+
+    window.clearTimeout(closeTimer);
+    closeTimer = window.setTimeout(() => {
+      lightbox.close();
+      lightbox.classList.remove("is-closing");
+    }, 260);
   };
 
   enlargeableImages.forEach((image) => {
@@ -24,6 +34,11 @@ if (enlargeableImages.length > 0) {
       lightboxImage.src = image.currentSrc || image.src;
       lightboxImage.alt = image.alt || "";
       lightbox.showModal();
+      lightbox.classList.remove("is-closing");
+      window.clearTimeout(closeTimer);
+      window.requestAnimationFrame(() => {
+        lightbox.classList.add("is-visible");
+      });
     });
   });
 
@@ -35,9 +50,19 @@ if (enlargeableImages.length > 0) {
     }
   });
 
+  lightbox.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    closeLightbox();
+  });
+
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
       closeLightbox();
     }
+  });
+
+  lightbox.addEventListener("close", () => {
+    lightbox.classList.remove("is-visible", "is-closing");
+    window.clearTimeout(closeTimer);
   });
 }

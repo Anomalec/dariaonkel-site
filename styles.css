@@ -315,6 +315,12 @@ body::before {
   overflow: hidden;
 }
 
+.nested-case-visual-link,
+.project-preview-link {
+  display: block;
+  text-decoration: none;
+}
+
 .nested-case-visual::after {
   content: "";
   position: absolute;
